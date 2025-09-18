@@ -23,7 +23,7 @@ double Environment::step(int action) {
     //Update position based on action
     if (action == 0) position = 0; //Hold
     else if (action == 1) position = 1; //Buy
-    else if (action == 2) position = -1; //Sell
+    else if (action == 2) position = 0; //Sell
 
     //Reward = profit/loss
     double reward = position * change;
