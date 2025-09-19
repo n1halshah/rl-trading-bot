@@ -1,4 +1,4 @@
-#include "environment.h"
+#include "../include/environment.h"
 #include <cstdlib> //rand()
 #include <ctime> //time()
 

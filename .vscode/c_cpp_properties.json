@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:/msys64/mingw64/include",
-                "C:/msys64/mingw64/include/c++/14.2.0"
+                "C:/msys64/mingw64/include/c++/14.2.0",
+                "${workspaceFolder}/include"
             ],
             "defines": [
                 "_DEBUG",
