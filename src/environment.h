@@ -9,6 +9,8 @@ class Environment {
         double step(int action); //Take action and return reward
 
     private:
-        double price; //Current price
-        int position; // +1=long, 0=neutral, -1=short
+        double price;
+        int position; 
+        double last_change;
+        double drift;
 };

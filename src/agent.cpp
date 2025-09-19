@@ -21,6 +21,21 @@ int Agent::choose_action(int state) {
     }
 }
 
+int Agent::greedy_action(int state){
+    int best_action = 0;
+    double best_value = Q[state][0];
+
+    for (int a = 1; a < Q[state].size(); a++){
+        if (Q[state][a] > best_value) {
+            best_value = Q[state][a];
+            best_action = a;
+        }
+    }
+    return best_action;
+}
+
+
+
 void Agent::learn(int state, int action, double reward, int next_state) {
     double max_next_Q = *std::max_element(Q[next_state].begin(), Q[next_state].end());
 
