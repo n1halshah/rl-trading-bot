@@ -54,7 +54,18 @@ int main() {
 
         for (int i = 0; i < 50; i++){
             int action = agent.choose_action(state_idx);
+            
+            double last_change = env.get_state()[2];
+            int position = static_cast<int>(env.get_state()[1]);
+
             double reward = env.step(action);
+
+            //Reward shaping
+            if ((position > 0 && last_change > 0) || (position < 0 && last_change < 0))
+                reward += 0.1; //bonus for following trend
+            else if ((position > 0 && last_change < 0) || (position < 0 && last_change > 0))
+                reward -= 0.05; // penalty for going against trend
+
             int next_state_idx = discretize_state(env.get_state());
 
             agent.learn(state_idx, action, reward, next_state_idx); 
@@ -63,7 +74,11 @@ int main() {
             total_reward += reward;
         }
 
-        agent.set_epsilon(std::max(0.05, agent.get_epsilon() * 0.99));
+        //Adaptive epsilon decay
+        if (episode & 10 == 0){ //every 10 episodes
+            if (total_reward < 0.5) agent.set_epsilon(std::min(1.0, agent.get_epsilon() * 1.05));
+            else agent.set_epsilon(std::max(0.05, agent.get_epsilon() * 0.99));
+        }
 
         if (episode % 10 == 0) {
             std::cout << "Episode " << episode
