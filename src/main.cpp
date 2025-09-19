@@ -1,7 +1,16 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "environment.h"
 #include "agent.h"
+
+//Convert numeric actions to readable labels
+std::string action_label(int action) {
+        if (action == 0) return "HOLD";
+        else if (action == 1) return "BUY";
+        else if (action == 2) return "SELL";
+        else return "UNKNOWN";
+    }
 
 //Discretize price + position into a Q-table index
 int discretize_state(const std::vector<double>& state){
@@ -36,6 +45,8 @@ int main() {
     int total_episodes = 1000;
     int steps_per_episode = 50;
 
+
+    //Training loop
     for (int episode = 0; episode < total_episodes; episode++) {
         env.reset();
         int state_idx = discretize_state(env.get_state());
@@ -60,7 +71,13 @@ int main() {
                       << " | Epsilon: " << agent.get_epsilon()
                       << std::endl;
         }        
-    }       
+    }      
+    
+
+    //Evaluation Mode
+    
+    std::ofstream log_file("evaluation_log.csv"); //Log evaluation results
+    log_file << "Step,Action,Price,Position,Reward\n"; //CSV header
 
     std::cout << "\n Evaluation Run \n";
     env.reset();
@@ -76,6 +93,7 @@ int main() {
 
         state_idx = next_state_idx;
         total_eval_reward += reward;
+        std::string act_label = action_label(action);
 
         std::cout << "Step " << i
               << " | Action: " << action
@@ -83,7 +101,14 @@ int main() {
               << " | Price: " << env.get_state()[0]
               << " | Position: " << env.get_state()[1]
               << std::endl;
+        
+        log_file << i << "," << act_label << ","
+                            << env.get_state()[0] << "," 
+                            << env.get_state()[1] << "," 
+                            << reward << "\n";
     }
+
+    log_file.close();
 
     std::cout << "Total Evaluation Reward: " << total_eval_reward << std::endl;
 
