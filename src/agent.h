@@ -9,6 +9,8 @@ public:
     //alpha - learning rate, gamma - discount factor, epsilon - exploration rate
     int choose_action(int state); //Return action to take
     void learn(int state, int action, double reward, int next_state); //Learning
+    void set_epsilon(double e);
+    double get_epsilon();
 
 private:
     int num_states;

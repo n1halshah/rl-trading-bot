@@ -27,3 +27,12 @@ void Agent::learn(int state, int action, double reward, int next_state) {
     Q[state][action] = Q[state][action] + alpha * (reward + gamma * max_next_Q - Q[state][action]);
     
 }
+
+void Agent::set_epsilon(double e){
+    epsilon = e;
+}
+
+double Agent::get_epsilon(){
+    return epsilon;
+}
+

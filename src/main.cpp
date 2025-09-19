@@ -23,11 +23,15 @@ int main() {
     //3 price buckets * 2 positions = 6 total states
     int num_states = 6; 
     int num_actions = 3; //hold, buy, sell
-    Agent agent(num_states, num_actions, 0.1, 0.9, 0.2);   
+    Agent agent(num_states, num_actions, 0.1, 0.9, 0.5);   
 
-    for (int episode = 0; episode < 100; episode++) {
+    int total_episodes = 200;
+    int steps_per_episode = 50;
+
+    for (int episode = 0; episode < total_episodes; episode++) {
         env.reset();
         int state_idx = discretize_state(env.get_state());
+        double episode_reward = 0.0;
 
         for (int i = 0; i < 50; i++){
             int action = agent.choose_action(state_idx);
@@ -36,16 +40,19 @@ int main() {
 
             agent.learn(state_idx, action, reward, next_state_idx); 
 
-            std::cout << "Step " << i
-                    << " | State: " << state_idx
-                    << " | Action: " << action
-                    << " | Reward: " << reward
-                    << " | Next State> " << next_state_idx << std::endl;
-            
-            state_idx = next_state_idx; //move forward
+            state_idx = next_state_idx; 
+            episode_reward += reward;
         }
-        std::cout << "Episode " << episode << " finished." << std::endl;
-    }
+
+        agent.set_epsilon(std::max(0.05, agent.get_epsilon() * 0.99));
+
+        if (episode % 10 == 0) {
+            std::cout << "Episode " << episode
+                      << " | Total Reward: " << episode_reward
+                      << " | Epsilon: " << agent.get_epsilon()
+                      << std::endl;
+        }        
+    }       
 
     return 0;
 }
