@@ -7,7 +7,7 @@ void train(Agent& agent, Environment& env, int total_episodes, int steps_per_epi
 void evaluate(Agent& agent, Environment& env, int steps);
 
 int main() {
-    Environment env;
+    Environment env("./data/AAPL.csv");
     int num_states = 27;
     int num_actions = 3;
 

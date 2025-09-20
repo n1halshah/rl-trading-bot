@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("evaluation_log.csv")
+df = pd.read_csv("./data/evaluation_log.csv")
 
 plt.plot(df['Step'], df['Price'], label='Price', color='black')
 
