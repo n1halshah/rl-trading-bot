@@ -10,4 +10,6 @@ int discretize_state(const std::vector<double>& state);
 
 std::string action_label(int action);
 
+
+std::vector<double> normalize_state(const std::vector<double>& state);
 #endif 

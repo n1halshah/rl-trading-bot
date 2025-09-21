@@ -8,16 +8,20 @@ void evaluate(Agent& agent, Environment& env, int steps);
 
 int main() {
     Environment env("./data/AAPL.csv");
-    int num_states = 27;
+    int state_size = 3;       // price, position, momentum
+    int hidden_size = 64;
     int num_actions = 3;
+    double gamma = 0.95;
+    double epsilon = 1.0;
+    double lr = 0.0005;
 
-    Agent agent(num_states, num_actions, 0.1, 0.9, 0.5);
+    Agent agent(state_size, hidden_size, num_actions, gamma, epsilon, lr);
 
     //Train
-    train(agent, env, 1000, 50);
-
+    train(agent, env, 2000, 200);
+    
     //Evaluate
-    evaluate(agent, env, 50);
+    evaluate(agent, env, 100);
 
     return 0;
 }

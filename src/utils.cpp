@@ -31,3 +31,11 @@ std::string action_label(int action) {
     else if (action == 2) return "SELL";
     else return "UNKNOWN";
 }
+
+
+std::vector<double> normalize_state(const std::vector<double>& state) {
+    double price = state[0] / 200.0;       // scale price
+    double position = state[1];
+    double momentum = state[2] / 10.0;
+    return {price, position, momentum};
+}

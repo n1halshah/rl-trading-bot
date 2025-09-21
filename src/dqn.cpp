@@ -20,14 +20,14 @@ DQN::DQN(int input_size, int hidden_size, int output_size, double lr)
     for (int i = 0; i < hidden_size; ++i){
         b1[i] = 0.0;
         for (int j = 0; j < input_size; ++j){
-            W1[i][j] == ((double) std::rand() / RAND_MAX - 0.5) * 2.0;
+            W1[i][j] = ((double) std::rand() / RAND_MAX - 0.5) * 0.1;
         }   
     }
 
     for (int i = 0; i < output_size; ++i) {
         b2[i] = 0.0;
         for (int j = 0; j < hidden_size; ++j)
-            W2[i][j] = ((double) std::rand() / RAND_MAX - 0.5) * 2.0; 
+            W2[i][j] = ((double) std::rand() / RAND_MAX - 0.5) * 0.1; 
     }
 }
 
@@ -59,7 +59,7 @@ std::vector<double> DQN::forward(const std::vector<double>& input){
     for (int i = 0; i < output_size; ++i) {
         double sum = b2[i];
         for (int j = 0; j < hidden_size; ++j) {
-            sum += W2[i][j] * input[j];
+            sum += W2[i][j] * hidden_output[j];
         }
         output[i] = sum;
     }

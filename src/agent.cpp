@@ -4,43 +4,45 @@
 #include <algorithm>
 #include <cstdlib> //rand()
 
-Agent::Agent(int num_states, int num_actions, double alpha, double gamma, double epsilon)
-    : num_states(num_states), num_actions(num_actions), alpha(alpha), gamma(gamma), epsilon(epsilon)
+Agent::Agent(int state_size, int hidden_size, int num_actions, double gamma, double epsilon, double lr)
+    : state_size(state_size), num_actions(num_actions), gamma(gamma), epsilon(epsilon),
+    net(state_size, hidden_size, num_actions, lr)
 {
-    Q = std::vector<std::vector<double>>(num_states, std::vector<double>(num_actions, 0.0));
     std::srand(std::time(0)); //seed RNG
 }
 
-int Agent::choose_action(int state) {
+int Agent::choose_action(const std::vector<double>& state) {
     double r = (double) rand() / RAND_MAX;
     if (r < epsilon) {
         return rand() % num_actions; //random action
     } else {
-        auto &row = Q[state];
-        return std::distance(row.begin(), std::max_element(row.begin(), row.end()));
+        std::vector<double> q_values = net.forward(state);
+        return std::distance(q_values.begin(), std::max_element(q_values.begin(), q_values.end()));
     }
 }
 
-int Agent::greedy_action(int state){
-    int best_action = 0;
-    double best_value = Q[state][0];
-
-    for (int a = 1; a < Q[state].size(); a++){
-        if (Q[state][a] > best_value) {
-            best_value = Q[state][a];
-            best_action = a;
-        }
-    }
-    return best_action;
+int Agent::greedy_action(const std::vector<double>& state){
+    std::vector<double> q_values = net.forward(state);
+    return std::distance(q_values.begin(), std::max_element(q_values.begin(), q_values.end()));
 }
 
+void Agent::learn(const std::vector<double>& state, int action, double reward, const std::vector<double>& next_state, bool done) {
+    //Predict current Q-values
+    std::vector<double> q_values = net.forward(state);
 
+    //Predict next state Q-values
+    std::vector<double> next_q_values = net.forward(next_state);
+    double max_next_q = *std::max_element(next_q_values.begin(), next_q_values.end());
 
-void Agent::learn(int state, int action, double reward, int next_state) {
-    double max_next_Q = *std::max_element(Q[next_state].begin(), Q[next_state].end());
+    //Build target Q-values (copy of q_values, but update only chosen action)
+    std::vector<double> target = q_values;
+    if (done) {
+        target[action] = reward; //terminal state
+    } else {
+        target[action] = reward + gamma * max_next_q;
+    }
 
-    Q[state][action] = Q[state][action] + alpha * (reward + gamma * max_next_Q - Q[state][action]);
-    
+    net.backward(state, target);
 }
 
 void Agent::set_epsilon(double e){
