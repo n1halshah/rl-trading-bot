@@ -12,6 +12,5 @@ Strengthen C++ skills by implementing a neural network and Deep Q-Learning from 
 
 Gain a deep understanding of RL internals, including forward/backward passes, Q-value updates, and reward shaping.
 
-Explore AI/ML applications in financial markets through hands-on, practical experimentation.
 
 
