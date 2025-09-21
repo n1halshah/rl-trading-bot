@@ -9,10 +9,11 @@ The agent observes market features (price, momentum, position) and chooses actio
 This project explores how reinforcement learning can be applied to **algorithmic trading**.  
 Instead of using fixed trading strategies, the agent learns **directly from data** to adapt to changing market conditions.
 
-I built this to deepen my understanding of:
-- Reinforcement learning algorithms (Q-learning, DQN).
-- Neural network design from scratch in C++.
-- Time-series feature engineering and financial signals.
+- Wanted to strengthen C++ skills by implementing a neural network and Deep Q-Learning from scratch.
+
+- Aimed to understand RL internals at a deeper level, including forward/backward passes, Q-value updates, and reward shaping.
+
+- Interested in applying AI/ML techniques to financial markets for hands-on experience in algorithmic trading.
 
 ---
 
